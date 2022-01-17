@@ -35,6 +35,7 @@ export default function Home() {
     <div>
       <Head>
         <title>Links</title>
+        <link rel="icon" href="/logo.png" />
       </Head>
       <main className="bg-gray-100 min-h-screen px-2">
         <h1 className="text-center text-3xl md:text-4xl font-bold py-10">

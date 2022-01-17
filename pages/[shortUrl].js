@@ -35,6 +35,7 @@ const ShortUrl = () => {
     <div>
       <Head>
         <title>Loading</title>
+        <link rel="icon" href="/logo.png" />
       </Head>
     <div className="linkScreen h-screen w-screen flex items-center justify-center text-[#636b6f] font-[100]">
       <h3 className="border-r-[2px] text-[26px] px-[15px]">{error ? "Error" : "Loading"}</h3>
