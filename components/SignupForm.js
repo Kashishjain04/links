@@ -3,13 +3,15 @@ import { useState } from "react";
 
 const SignupForm = () => {
 	const router = useRouter(),
-	 [name, setName] = useState(""),
+		[loading, setLoading] = useState(false),
+		[name, setName] = useState(""),
 		[email, setEmail] = useState(""),
 		[password, setPassword] = useState("");
 
 	const signupHandler = (e) => {
 		e.preventDefault();
 		if (!email || !password || !name) return alert("Please fill all the fields");
+		setLoading(true);
 		fetch("/api/auth/signup", {
 			method: "POST",
 			body: JSON.stringify({ email, password, name }),
@@ -19,7 +21,8 @@ const SignupForm = () => {
 				if (res.error) return console.log(res.errer);
 				localStorage.setItem("token", res.token);
 				router.push("/");
-			});
+			})
+			.finally(() => setLoading(false));
 	};
 
 	return (
@@ -74,7 +77,11 @@ const SignupForm = () => {
 				style={{ marginTop: "1rem" }}
 				className="w-full rounded-md bg-[#eb7f00] text-white font-medium p-2"
 			>
-				Signup
+				{loading ? (
+					<div className="mx-auto loader rounded-full border-2 border-t-2 sm:border-4 sm:border-t-4 border-t-white border-[#eb7f00] h-6 w-6" />
+				) : (
+					"Signup"
+				)}
 			</button>
 		</form>
 	);

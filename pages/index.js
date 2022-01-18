@@ -9,11 +9,14 @@ import { login } from "../redux/slices/userSlice";
 export default function Home() {
 	const dispatch = useDispatch(),
 		[loading, setLoading] = useState(true),
+		[shortLoading, setShortLoading] = useState(false),
 		[url, setUrl] = useState(""),
 		[readOnly, setReadOnly] = useState(false),
 		router = useRouter();
 
-	const shorten = () => {
+	const shorten = (e) => {
+		e.preventDefault();
+		setShortLoading(true);
 		const prefix1 = "http://",
 			prefix2 = "https://";
 		let longUrl = url;
@@ -22,17 +25,25 @@ export default function Home() {
 		}
 		fetch("/api/shorten", {
 			method: "POST",
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem("token")}`,
+			},
 			body: JSON.stringify({ longUrl }),
 		})
 			.then((res) => res.json())
 			.then((res) => {
+				if(res.error){
+					alert(res.error);
+				}
 				setUrl(process.env.NEXT_PUBLIC_BASE_URL + "/" + res.short);
 				setReadOnly(true);
 			})
-			.catch((err) => console.log(err.message));
+			.catch((err) => console.log(err.message))
+			.finally(() => setShortLoading(false));
 	};
 
-	const copyHandler = () => {
+	const copyHandler = (e) => {
+		e.preventDefault();
 		navigator.clipboard.writeText(url);
 	};
 
@@ -66,26 +77,36 @@ export default function Home() {
 			) : (
 				<>
 					<Navbar />
-					<main className="pt-14 bg-gray-100 min-h-screen px-4 grid place-items-center">
-						<div className="shadow-xl bg-white rounded-md border w-full max-w-3xl mx-auto flex items-center p-2 md:p-4 space-x-0 space-y-2 sm:space-y-0 sm:space-x-4 flex-col sm:flex-row">
+					<main className="pt-14 bg-gray-100 min-h-screen">
+						<form
+							onSubmit={readOnly ? copyHandler : shorten}
+							className="mt-48 shadow-xl bg-white rounded-md border w-full max-w-xs sm:max-w-3xl mx-auto flex items-center p-2 md:p-4 space-x-0 space-y-2 sm:space-y-0 sm:space-x-4 flex-col sm:flex-row"
+						>
 							<input
 								disabled={readOnly}
 								type="url"
 								placeholder="URL Here..."
 								className={
-									"text-sm md:text-lg flex-1 border p-2 rounded-md w-full sm:w-auto" +
+									"text-lg md:text-lg flex-1 border p-2 rounded-md w-full sm:w-auto" +
 									(readOnly && "cursor-not-allowed")
 								}
 								value={url}
 								onChange={(e) => setUrl(e.target.value)}
+								required
 							/>
 							<button
-								onClick={readOnly ? copyHandler : shorten}
-								className="bg-[#eb7f00] text-white text-sm md:text-lg font-medium p-2 rounded-md w-full sm:w-auto"
+								type="submit"
+								className="bg-[#eb7f00] text-white text-lg md:text-lg font-medium p-2 rounded-md w-full sm:w-28"
 							>
-								{readOnly ? "Copy URL" : "Shorten"}
+								{shortLoading ? (
+									<div className="mx-auto loader rounded-full border-2 border-t-2 sm:border-4 sm:border-t-4 border-t-white border-[#eb7f00] h-6 w-6 sm:h-8 sm:w-8" />
+								) : readOnly ? (
+									"Copy URL"
+								) : (
+									"Shorten"
+								)}
 							</button>
-						</div>
+						</form>
 					</main>
 				</>
 			)}
