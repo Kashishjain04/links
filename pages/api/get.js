@@ -4,8 +4,8 @@ const handler = async (req, res) => {
   const { shortUrl } = req.query;
 
   const client = await clientPromise,
-    db = client.db("links");
-  const doc = await db.collection(process.env.MONGODB_DB).findOneAndUpdate(
+    db = client.db(process.env.MONGODB_DB);
+  const doc = await db.collection("links").findOneAndUpdate(
     { short: shortUrl },
     {
       $currentDate: { lastAccessed: true },
