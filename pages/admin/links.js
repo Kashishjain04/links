@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import LinksTable from "../../components/LinksTable";
 import Loader from "../../components/Loader";
 import Navbar from "../../components/Navbar";
 import { selectUser, setUser } from "../../redux/slices/userSlice";
@@ -52,8 +53,8 @@ const LinksPage = () => {
 			) : (
 				<>
 					<Navbar />
-					<main className="bg-gray-100 min-h-screen grid place-items-center">
-						<h1>Links Here</h1>
+					<main className="pt-16 pb-2 px-4 bg-gray-100 min-h-screen grid place-items-center">
+						<LinksTable links={links} />
 					</main>
 				</>
 			)}
