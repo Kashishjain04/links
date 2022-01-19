@@ -1,9 +1,10 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Loader from "../components/Loader";
-import LoginForm from "../components/LoginForm";
-import SignupForm from "../components/SignupForm";
+import Loader from "../../components/Loader";
+import LoginForm from "../../components/LoginForm";
+import SignupForm from "../../components/SignupForm";
+import isAuthenticated from "../../utils/isAuthenticated";
 
 const AuthPage = () => {
 	const router = useRouter(),
@@ -12,30 +13,16 @@ const AuthPage = () => {
 
 	useEffect(() => {
 		setLoading(true);
-		const localToken = localStorage.getItem("token");
-		if (localToken)
-			return fetch("/api/auth/validate", {
-				method: "GET",
-				headers: {
-					Authorization: `Bearer ${localToken}`,
-				},
-			})
-				.then((res) => res.json())
-				.then((res) => {
-					if (res.user) {
-						dispatch(login(res.user));
-						router.push("/");
-					}
-					setLoading(false);
-				})
-				.catch(() => setLoading(false));
-		else setLoading(false);
+		isAuthenticated()
+			.then((user) => router.push("/"))
+			.catch(() => setLoading(false));
 	}, []);
 
 	return (
 		<div>
 			<Head>
 				<title>Links | Login</title>
+				<link rel="icon" href="/logo.png" />
 			</Head>
 			{loading ? (
 				<Loader />

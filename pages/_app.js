@@ -5,7 +5,7 @@ import "../styles/globals.css";
 function MyApp({ Component, pageProps }) {
 	return (
 		<Provider store={store}>
-			<Component {...pageProps} />{" "}
+			<Component {...pageProps} />
 		</Provider>
 	);
 }

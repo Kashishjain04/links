@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
-import { login } from "../redux/slices/userSlice";
+import { setUser } from "../redux/slices/userSlice";
+import isAuthenticated from "../utils/isAuthenticated";
 
 export default function Home() {
 	const dispatch = useDispatch(),
@@ -32,7 +33,7 @@ export default function Home() {
 		})
 			.then((res) => res.json())
 			.then((res) => {
-				if(res.error){
+				if (res.error) {
 					alert(res.error);
 				}
 				setUrl(process.env.NEXT_PUBLIC_BASE_URL + "/" + res.short);
@@ -49,21 +50,12 @@ export default function Home() {
 
 	useEffect(() => {
 		setLoading(true);
-		const localToken = localStorage.getItem("token");
-		if (!localToken) return router.replace("/auth");
-		fetch("/api/auth/validate", {
-			method: "GET",
-			headers: {
-				Authorization: `Bearer ${localToken}`,
-			},
-		})
-			.then((res) => res.json())
-			.then((res) => {
-				if (res.error) return router.replace("/auth");
-				dispatch(login(res.user));
+		isAuthenticated()
+			.then((user) => {
+				dispatch(setUser(user));
 				setLoading(false);
 			})
-			.catch(() => router.replace("/auth"));
+			.catch(() => router.push("/admin/auth"));
 	}, []);
 
 	return (
