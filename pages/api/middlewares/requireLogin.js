@@ -3,10 +3,8 @@ import { ObjectId } from "mongodb";
 import clientPromise from "./mongoConnect";
 
 export default async function handler(req, res, next) {
-	const { authorization } = req.headers;
-	if (!authorization) return res.status(401).json({ error: "Missing Authorization Header" });
-
-	const token = authorization.replace("Bearer ", "");
+	const {token} = req.cookies;
+	if (!token) return res.status(401).json({ error: "Unauthorized" });
 	jwt.verify(token, process.env.JWT_SECRET, async (err, payload) => {
 		if (err) return res.status(401).json({ error: "Invalid Token" });
 		const { _id } = payload;

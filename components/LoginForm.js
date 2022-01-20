@@ -18,7 +18,6 @@ const LoginForm = () => {
 			.then((res) => res.json())
 			.then((res) => {
 				if (res.error) return console.log(res.errer);
-				localStorage.setItem("token", res.token);
 				router.push("/");
 			})
 			.finally(() => setLoading(false));

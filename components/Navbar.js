@@ -14,9 +14,14 @@ const Navbar = () => {
 		[expanded, setExpanded] = useState(false);
 
 	const logoutHandler = () => {
-		localStorage.removeItem("token");
-		dispatch(resetUser());
-		router.replace("/admin/auth");
+		fetch("/api/auth/logout", {
+			method: "GET",
+		})
+			.then(() => {
+				dispatch(resetUser());
+				router.replace("/admin/auth");
+			})
+			.catch(() => alert("Unexpected error occured"));
 	};
 
 	const dropdown = (
@@ -55,7 +60,12 @@ const Navbar = () => {
 	return (
 		<>
 			<div className="h-14 px-4 w-screen bg-[#B9D6F8] fixed top-0 flex items-center justify-between shadow-md">
-				<h1 onClick={() => router.push("/")} className="text-center text-2xl font-medium cursor-pointer">Links</h1>
+				<h1
+					onClick={() => router.push("/")}
+					className="text-center text-2xl font-medium cursor-pointer"
+				>
+					Links
+				</h1>
 				{user ? (
 					<IconButton onClick={() => setExpanded((prev) => !prev)}>
 						<Avatar>

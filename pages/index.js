@@ -1,23 +1,20 @@
+import Cookies from "cookies";
+import Error from "next/error";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import Loader from "../components/Loader";
 import Navbar from "../components/Navbar";
-import { setUser } from "../redux/slices/userSlice";
-import isAuthenticated from "../utils/isAuthenticated";
+import { resetUser, setUser } from "../redux/slices/userSlice";
 
-export default function Home() {
+export default function Home(props) {
 	const dispatch = useDispatch(),
-		[loading, setLoading] = useState(true),
-		[shortLoading, setShortLoading] = useState(false),
+		[loading, setLoading] = useState(false),
 		[url, setUrl] = useState(""),
-		[readOnly, setReadOnly] = useState(false),
-		router = useRouter();
+		[readOnly, setReadOnly] = useState(false);
 
 	const shorten = (e) => {
 		e.preventDefault();
-		setShortLoading(true);
+		setLoading(true);
 		const prefix1 = "http://",
 			prefix2 = "https://";
 		let longUrl = url;
@@ -26,9 +23,6 @@ export default function Home() {
 		}
 		fetch("/api/shorten", {
 			method: "POST",
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem("token")}`,
-			},
 			body: JSON.stringify({ longUrl }),
 		})
 			.then((res) => res.json())
@@ -40,7 +34,7 @@ export default function Home() {
 				setReadOnly(true);
 			})
 			.catch((err) => console.log(err.message))
-			.finally(() => setShortLoading(false));
+			.finally(() => setLoading(false));
 	};
 
 	const copyHandler = (e) => {
@@ -49,14 +43,9 @@ export default function Home() {
 	};
 
 	useEffect(() => {
-		setLoading(true);
-		isAuthenticated()
-			.then((user) => {
-				dispatch(setUser(user));
-				setLoading(false);
-			})
-			.catch(() => router.push("/admin/auth"));
-	}, []);
+		if (props.user) dispatch(setUser(props.user));
+		else dispatch(resetUser());
+	}, [props.user]);
 
 	return (
 		<div>
@@ -64,8 +53,8 @@ export default function Home() {
 				<title>Links</title>
 				<link rel="icon" href="/logo.png" />
 			</Head>
-			{loading ? (
-				<Loader />
+			{props.error ? (
+				<Error statusCode={props.error.code} title={props.error.title} />
 			) : (
 				<>
 					<Navbar />
@@ -90,7 +79,7 @@ export default function Home() {
 								type="submit"
 								className="bg-[#eb7f00] text-white text-lg md:text-lg font-medium p-2 rounded-md w-full sm:w-28"
 							>
-								{shortLoading ? (
+								{loading ? (
 									<div className="mx-auto loader rounded-full border-2 border-t-2 sm:border-4 sm:border-t-4 border-t-white border-[#eb7f00] h-6 w-6 sm:h-8 sm:w-8" />
 								) : readOnly ? (
 									"Copy URL"
@@ -104,4 +93,21 @@ export default function Home() {
 			)}
 		</div>
 	);
+}
+
+export async function getServerSideProps({ req, res }) {
+	const cookies = new Cookies(req, res);
+	try {
+		const isAuth = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/validate`, {
+			method: "GET",
+			headers: {
+				cookie: `token=${cookies.get("token")}`,
+			},
+		});
+		const { user } = await isAuth.json();
+		if (!user) return { redirect: { destination: "/admin/auth" } };
+		return { props: { user } };
+	} catch (error) {
+		return { props: { user: null, error: error.message || "Invalid Server Error", code: 500 } };
+	}
 }

@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import Cookies from "cookies";
 import jwt from "jsonwebtoken";
 import clientPromise from "../middlewares/mongoConnect";
 
@@ -21,8 +22,8 @@ export default async function handler(req, res) {
 			.insertOne({ name, email, password: hashedPassword, links: [] });
 		if (doc.acknowledged) {
 			const token = jwt.sign({ _id: doc.insertedId }, process.env.JWT_SECRET);
+			setCookies(req, res, "token", token, Date.now() + 1000 * 60 * 60 * 24 * 28);
 			return res.status(200).json({
-				token,
 				user: { name, email, links: [] },
 			});
 		} else {

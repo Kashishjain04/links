@@ -1,22 +1,12 @@
+import Cookies from "cookies";
+import Error from "next/error";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import Loader from "../../components/Loader";
+import { useState } from "react";
 import LoginForm from "../../components/LoginForm";
 import SignupForm from "../../components/SignupForm";
-import isAuthenticated from "../../utils/isAuthenticated";
 
-const AuthPage = () => {
-	const router = useRouter(),
-		[loading, setLoading] = useState(true),
-		[active, setActive] = useState(1);
-
-	useEffect(() => {
-		setLoading(true);
-		isAuthenticated()
-			.then((user) => router.push("/"))
-			.catch(() => setLoading(false));
-	}, []);
+const AuthPage = (props) => {
+	const [active, setActive] = useState(1);
 
 	return (
 		<div>
@@ -24,8 +14,8 @@ const AuthPage = () => {
 				<title>Links | Login</title>
 				<link rel="icon" href="/logo.png" />
 			</Head>
-			{loading ? (
-				<Loader />
+			{props.error ? (
+				<Error statusCode={props.error.code} title={props.error.title} />
 			) : (
 				<main className="bg-gray-100 min-h-screen grid place-items-center">
 					<div>
@@ -54,5 +44,22 @@ const AuthPage = () => {
 		</div>
 	);
 };
+
+export async function getServerSideProps({ req, res }) {
+	const cookies = new Cookies(req, res);
+	try {
+		const isAuth = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/validate`, {
+			method: "GET",
+			headers: {
+				cookie: `token=${cookies.get("token")}`,
+			},
+		});
+		const { user } = await isAuth.json();
+		if (user) return { redirect: { destination: "/" } };
+		return { props: {} };
+	} catch (error) {
+		return { props: { error: error.message || "Invalid Server Error", code: 500 } };
+	}
+}
 
 export default AuthPage;
