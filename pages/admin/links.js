@@ -37,7 +37,7 @@ const LinksPage = (props) => {
 export default LinksPage;
 
 export async function getServerSideProps({ req, res }) {
-	const cookies = new Cookies(req, res);
+	const cookies = new Cookies(req, res, { secure: true });
 	try {
 		const isAuth = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/validate`, {
 			method: "GET",
