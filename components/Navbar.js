@@ -59,7 +59,7 @@ const Navbar = () => {
 
 	return (
 		<>
-			<div className="h-14 px-4 w-screen bg-[#B9D6F8] fixed top-0 flex items-center justify-between shadow-md">
+			<div className="z-10 h-14 px-4 w-screen bg-[#B9D6F8] fixed top-0 flex items-center justify-between shadow-md">
 				<h1
 					onClick={() => router.push("/")}
 					className="text-center text-2xl font-medium cursor-pointer"

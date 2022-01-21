@@ -7,7 +7,7 @@ const LinksTable = ({ links }) => (
 					<th className="p-2 font-medium border-r-2">Original URL</th>
 					<th className="p-2 font-medium border-r-2">Short URL</th>
 					{/* <th className="p-2 font-medium border-r-2">Last Accessed</th> */}
-					<th className="p-2 font-medium">Times Accessed</th>
+					<th className="p-2 font-medium">Clicked</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -16,22 +16,22 @@ const LinksTable = ({ links }) => (
 						{/* <td className="text-center p-2 border-r-2">
 								{new Date(link?.created).toLocaleString()}
 							</td> */}
-						<td className="text-center p-2 border-r-2">
+						<td className="text-center p-2 border-r-2 w-[50%]">
 							<a
 								href={link?.long}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="text-blue-500 underline active:text-blue-700 break-all"
+								className="text-blue-500 underline active:text-blue-700 break-all line-clamp-3 max-w-[400px]"
 							>
 								{link?.long}
 							</a>
 						</td>
-						<td className="text-center p-2 border-r-2">
+						<td className="text-center p-2 border-r-2 w-[50%]">
 							<a
 								href={process.env.NEXT_PUBLIC_BASE_URL + "/" + link?.short}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="text-blue-500 underline active:text-blue-700 break-all"
+								className="text-blue-500 underline active:text-blue-700 break-all line-clamp-3 max-w-[400px]"
 							>
 								{process.env.NEXT_PUBLIC_BASE_URL + "/" + link?.short}
 							</a>
