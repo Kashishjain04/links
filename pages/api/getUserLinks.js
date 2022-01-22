@@ -1,7 +1,6 @@
 import clientPromise from "./middlewares/mongoConnect";
 import runMiddleware from "./utils/runMiddleware";
 import requireLogin from "./middlewares/requireLogin";
-import { ObjectId } from "mongodb";
 
 export default async function handler(req, res) {
 	await runMiddleware(req, res, requireLogin);
