@@ -32,14 +32,14 @@ const Navbar = () => {
 			onClose={() => setExpanded(false)}
 		>
 			<div
-				className={`shadow-md absolute top-14 border-t right-0 md:right-2 bg-[#B9D6F8] p-4 w-full md:w-64 rounded-b-lg flex-grow ${
+				className={`shadow-md absolute top-14 border-t md:right-2 bg-[#B9D6F8] p-4 w-full md:w-64 rounded-b-lg flex-grow ${
 					expanded ? "block" : "hidden"
 				}`}
 			>
 				<div className="text-sm text-black">
 					<div
 						onClick={() => router.push("/admin/links")}
-						className="w-full block mt-1 py-2 -mx-2 px-2 rounded cursor-pointer hover:text-white hover:bg-[#001A55] transition duration-100"
+						className="w-full block mt-1 p-2 rounded cursor-pointer hover:text-white hover:bg-[#001A55] transition duration-100"
 					>
 						My Links
 					</div>
@@ -48,7 +48,7 @@ const Navbar = () => {
 							setExpanded(false);
 							logoutHandler();
 						}}
-						className="w-full block mt-1 py-2 -mx-2 px-2 rounded cursor-pointer hover:text-white hover:bg-[#001A55] transition duration-100"
+						className="w-full block mt-1 p-2 rounded cursor-pointer hover:text-white hover:bg-[#001A55] transition duration-100"
 					>
 						Logout
 					</p>
