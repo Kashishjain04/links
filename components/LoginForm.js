@@ -17,9 +17,10 @@ const LoginForm = () => {
 		})
 			.then((res) => res.json())
 			.then((res) => {
-				if (res.error) return console.log(res.errer);
+				if (res.error) return console.log(res.error);
 				router.push("/");
 			})
+			.catch((err) => console.log(err))
 			.finally(() => setLoading(false));
 	};
 

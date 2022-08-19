@@ -52,6 +52,7 @@ const handler = async (req, res) => {
 			createdBy: { _id: ObjectId(req.user._id), email: req.user.email },
 			lastAccessed: 0,
 			timesAccessed: 0,
+			analytics: [],
 		});
 
 		if (doc.acknowledged) {
