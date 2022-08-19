@@ -1,27 +1,8 @@
 import clientPromise from "./middlewares/mongoConnect";
-import { getIp } from "./utils/utility";
 
 const handler = async (req, res) => {
 	const { shortUrl } = req.query;
-
-  const ip = getIp(req)
-
-  console.log(ip);
-
-	const geolocation = await fetch(
-		`https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.GEOLOCATION_API_ID}&ip=${ip}`
-	)
-		.then((res) => res.json())
-		.then((res) => res)
-		.catch((err) => console.log(err));
-
-	const analyticsObj = {
-		timestamp: new Date(),
-		ip: geolocation.ip,
-		country: geolocation.country_name,
-		region: geolocation.state_prov,
-		timeZone: geolocation.time_zone,
-	};
+  const { analyticsObj } = JSON.parse(req.body);
 
 	const client = await clientPromise,
 		db = client.db(process.env.MONGODB_DB);

@@ -1,4 +1,5 @@
 import Error from "next/error";
+import { getIp } from "./api/utils/utility";
 
 const ShortUrl = (props) => {
 	console.log(props);
@@ -15,9 +16,27 @@ export default ShortUrl;
 export async function getServerSideProps(context) {
 	const { shortUrl } = context.params;
 
+	const ip = getIp(context.req);
+
+	const geolocation = await fetch(
+		`https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.GEOLOCATION_API_ID}&ip=${ip}`
+	)
+		.then((res) => res.json())
+		.then((res) => res)
+		.catch((err) => console.log(err));
+
+	const analyticsObj = {
+		timestamp: new Date(),
+		ip: geolocation.ip,
+		country: geolocation.country_name,
+		region: geolocation.state_prov,
+		timeZone: geolocation.time_zone,
+	};
+
 	if (shortUrl)
 		return fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/get?shortUrl=${shortUrl}`, {
-			method: "GET",
+			method: "POST",
+			body: JSON.stringify({ analyticsObj }),
 		})
 			.then((res) => res.json())
 			.then((res) => {
