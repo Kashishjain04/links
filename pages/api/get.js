@@ -1,10 +1,15 @@
 import clientPromise from "./middlewares/mongoConnect";
+import { getIp } from "./utils/utility";
 
 const handler = async (req, res) => {
 	const { shortUrl } = req.query;
 
+  const ip = getIp(req)
+
+  console.log(ip);
+
 	const geolocation = await fetch(
-		`https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.GEOLOCATION_API_ID}`
+		`https://api.ipgeolocation.io/ipgeo?apiKey=${process.env.GEOLOCATION_API_ID}&ip=${ip}`
 	)
 		.then((res) => res.json())
 		.then((res) => res)
