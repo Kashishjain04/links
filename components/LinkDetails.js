@@ -6,12 +6,13 @@ import QRIcon from "@heroicons/react/outline/QrcodeIcon";
 import DestinationIcon from "@heroicons/react/outline/SwitchHorizontalIcon";
 import ChartIcon from "@heroicons/react/solid/ChartBarIcon";
 import toast, { Toaster } from "react-hot-toast";
+import Analytics from "./Analytics";
 
 const LinkDetails = ({ link, className = "" }) => {
 	const copyHandler = (e) => {
 		e.preventDefault();
 		navigator?.clipboard
-			?.writeText(process.env.NEXT_PUBLIC_BASE_URL + "/" + link.short)
+			?.writeText(process.env.NEXT_PUBLIC_BASE_URL + "/" + link?.short)
 			.then(() => toast.success("Copied to clipboard!"))
 			.catch((err) => toast.error("Unable to copy!"));
 	};
@@ -19,7 +20,7 @@ const LinkDetails = ({ link, className = "" }) => {
 	return (
 		<div className={className + " select-none flex flex-col space-y-5"}>
 			<Toaster position="bottom-center" reverseOrder={false} />
-			<p className="uppercase text-gray-500 mt-5">{moment(link.created).format("MMM D YYYY, H:mm")}</p>
+			<p className="uppercase text-gray-500 mt-5">{moment(link?.created).format("MMM D YYYY, H:mm")}</p>
 			<div className="border border-blue-500 rounded-lg px-4 py-2 flex flex-col xs:flex-row items-center">
 				<div className="flex flex-1 self-start xs:self-center">
 					<LinkIcon className="w-5 h-5 mr-2 text-gray-500" />
@@ -29,7 +30,7 @@ const LinkDetails = ({ link, className = "" }) => {
 						target="_blank"
 						rel="noopener noreferrer"
 					>
-						{process.env.NEXT_PUBLIC_BASE_URL + "/" + link.short}
+						{process.env.NEXT_PUBLIC_BASE_URL + "/" + link?.short}
 					</a>
 				</div>
 				<div className="w-full xs:w-auto flex items-center text-white xs:text-blue-500 xs:space-x-2 bg-blue-400 xs:bg-transparent rounded-md xs:rounded-none mt-2 xs:mt-0">
@@ -55,16 +56,17 @@ const LinkDetails = ({ link, className = "" }) => {
 				</div>
 				<div className="flex flex-col ">
 					<p className="font-bold">Destination:</p>
-					<p className="break-all">{link.long}</p>
+					<p className="break-all">{link?.long}</p>
 				</div>
 			</div>
 			<div className="">
 				<div className="flex items-baseline space-x-2">
-					<h1 className="text-3xl font-bold">{link.timesAccessed}</h1>
+					<h1 className="text-3xl font-bold">{link?.timesAccessed}</h1>
 					<ChartIcon className="h-4 w-4" />
 				</div>
 				<p className="text-sm text-gray-500">TOTAL CLICKS</p>
 			</div>
+			<Analytics analytics={link?.analytics} />
 		</div>
 	);
 };

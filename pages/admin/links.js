@@ -43,7 +43,7 @@ const LinksPage = (props) => {
 							className="hidden md:block md:flex-[0.4] lg:flex-[0.3] h-[90vh]"
 							links={props.links}
 						/>
-						<LinkDetails link={props.links[activeLink]} className="flex-1 md:py-4 md:px-8" />
+						<LinkDetails link={props.links[activeLink]} className="h-[90vh] overflow-y-scroll flex-1 md:py-4 md:px-8" />
 					</main>
 				</>
 			)}
