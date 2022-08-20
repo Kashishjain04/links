@@ -1,17 +1,22 @@
 import Cookies from "cookies";
 import Error from "next/error";
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import LinksTable from "../../components/LinksTable";
+import LinkDetails from "../../components/LinkDetails";
+import LinksTableBG from "../../components/LinksTableBG";
+import LinksTableSM from "../../components/LinksTableSM";
 import Navbar from "../../components/Navbar";
 import { resetUser, setUser } from "../../redux/slices/userSlice";
 
 const LinksPage = (props) => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch(),
+		[activeLink, setActiveLink] = useState(0);
+
 	useEffect(() => {
 		if (props.user) dispatch(setUser(props.user));
 		else dispatch(resetUser());
+		//eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props.user]);
 
 	return (
@@ -25,8 +30,20 @@ const LinksPage = (props) => {
 			) : (
 				<>
 					<Navbar />
-					<main className="pt-16 pb-2 px-4 bg-gray-100 min-h-screen grid place-items-center">
-						<LinksTable links={props.links} />
+					<main className="px-4 md:px-0 pt-16 bg-gray-100 min-h-screen flex flex-col md:flex-row">
+						<LinksTableSM
+							activeLink={activeLink}
+							setActiveLink={setActiveLink}
+							links={props.links}
+							className="md:hidden"
+						/>
+						<LinksTableBG
+							activeLink={activeLink}
+							setActiveLink={setActiveLink}
+							className="hidden md:block md:flex-[0.4] lg:flex-[0.3] h-[90vh]"
+							links={props.links}
+						/>
+						<LinkDetails link={props.links[activeLink]} className="flex-1 md:py-4 md:px-8" />
 					</main>
 				</>
 			)}
@@ -47,13 +64,13 @@ export async function getServerSideProps({ req, res }) {
 		});
 		const { user } = await isAuth.json();
 		if (!user) return { redirect: { destination: "/admin/auth" } };
-		const links = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getUserLinks`, {
+		let links = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getUserLinks`, {
 			method: "GET",
 			headers: {
 				cookie: `token=${cookies.get("token")}`,
 			},
 		}).then((res) => res.json());
-		return { props: { links, user } };
+		return { props: { links: links.reverse(), user } };
 	} catch (error) {
 		return { props: { user: null, error: error.message || "Invalid Server Error", code: 500 } };
 	}

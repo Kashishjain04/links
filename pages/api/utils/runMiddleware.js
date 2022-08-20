@@ -1,4 +1,4 @@
-export default (req, res, fn) =>
+const runMiddleware = (req, res, fn) =>
 	new Promise((resolve, reject) => {
 		fn(req, res, (result) => {
 			if (result instanceof Error) {
@@ -7,3 +7,5 @@ export default (req, res, fn) =>
 			return resolve(result);
 		});
 	});
+
+export default runMiddleware;

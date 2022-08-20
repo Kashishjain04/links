@@ -7,6 +7,14 @@
 	animation: spinner 1.5s linear infinite;
 }
 
+.hide-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none; 
+}
+.hide-scrollbar::-webkit-scrollbar { 
+	display: none;
+}
+
 @-webkit-keyframes spinner {
 	0% {
 		-webkit-transform: rotate(0deg);
