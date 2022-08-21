@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const SignupForm = () => {
 	const router = useRouter(),
@@ -10,7 +11,7 @@ const SignupForm = () => {
 
 	const signupHandler = (e) => {
 		e.preventDefault();
-		if (!email || !password || !name) return alert("Please fill all the fields");
+		if (!email || !password || !name) return toast.error("Please fill all the fields");
 		setLoading(true);
 		fetch("/api/auth/signup", {
 			method: "POST",
@@ -18,8 +19,8 @@ const SignupForm = () => {
 		})
 			.then((res) => res.json())
 			.then((res) => {
-				if (res.error) return console.log(res.errer);
-				router.push("/");
+				if (res.error) return toast.error(res.error);
+				router.replace("/");
 			})
 			.finally(() => setLoading(false));
 	};
@@ -29,6 +30,7 @@ const SignupForm = () => {
 			onSubmit={signupHandler}
 			className="sm:w-[400px] flex flex-col space-y-2 bg-white rounded-md p-4 border-2"
 		>
+			<Toaster position="bottom-center" reverseOrder={false} />
 			<div className="flex items-center justify-between">
 				<label className="sm:w-1/4 sm:block hidden" htmlFor="name">
 					Name:

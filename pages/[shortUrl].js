@@ -2,8 +2,6 @@ import Error from "next/error";
 import { getIp } from "./api/utils/utility";
 
 const ShortUrl = (props) => {
-	console.log(props);
-
 	return props.error ? (
 		<Error statusCode={404} title="Link not found" />
 	) : (
@@ -23,7 +21,7 @@ export async function getServerSideProps(context) {
 	)
 		.then((res) => res.json())
 		.then((res) => res)
-		.catch((err) => console.log(err));
+		.catch(() => {});
 
 	const analyticsObj = {
 		timestamp: new Date(),

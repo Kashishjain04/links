@@ -1,26 +1,40 @@
 import moment from "moment";
-import React from "react";
+import React, { useState } from "react";
 import LinkIcon from "@heroicons/react/outline/LinkIcon";
 import CopyIcon from "@heroicons/react/outline/DuplicateIcon";
 import QRIcon from "@heroicons/react/outline/QrcodeIcon";
 import DestinationIcon from "@heroicons/react/outline/SwitchHorizontalIcon";
 import ChartIcon from "@heroicons/react/solid/ChartBarIcon";
 import toast, { Toaster } from "react-hot-toast";
+import QRCode from "./QRCode";
 import Analytics from "./Analytics";
 
 const LinkDetails = ({ link, className = "" }) => {
+	const [showQR, setShowQR] = useState(false);
+
 	const copyHandler = (e) => {
 		e.preventDefault();
 		navigator?.clipboard
 			?.writeText(process.env.NEXT_PUBLIC_BASE_URL + "/" + link?.short)
 			.then(() => toast.success("Copied to clipboard!"))
-			.catch((err) => toast.error("Unable to copy!"));
+			.catch(() => toast.error("Unable to copy!"));
+	};
+
+	const showQRCode = (e) => {
+		e.preventDefault();
+		setShowQR(true);
 	};
 
 	return (
 		<div className={className + " select-none flex flex-col space-y-5"}>
+			<QRCode showQR={showQR} setShowQR={setShowQR} url={process.env.NEXT_PUBLIC_BASE_URL + "/" + link?.short} />
 			<Toaster position="bottom-center" reverseOrder={false} />
-			<p className="uppercase text-gray-500 mt-5">{moment(link?.created).format("MMM D YYYY, H:mm")}</p>
+			<p className="mt-5">
+				<span className="uppercase text-gray-500">
+					{moment(link?.created).format("MMM D YYYY, H:mm")}{" "}
+				</span>
+				<span className="text-[#eb7f00] font-medium">- {link?.createdBy?.name}</span>
+			</p>
 			<div className="border border-blue-500 rounded-lg px-4 py-2 flex flex-col xs:flex-row items-center">
 				<div className="flex flex-1 self-start xs:self-center">
 					<LinkIcon className="w-5 h-5 mr-2 text-gray-500" />
@@ -42,7 +56,7 @@ const LinkDetails = ({ link, className = "" }) => {
 						<span>Copy</span>
 					</div>
 					<div
-						onClick={copyHandler}
+						onClick={showQRCode}
 						className="w-1/2 xs:w-auto flex items-center justify-center xs:justify-start space-x-1 cursor-pointer active:text-gray-200 xs:active:text-blue-400 xs:hover:bg-gray-200 p-2 xs:rounded-md"
 					>
 						<QRIcon className="w-5 h-5" />

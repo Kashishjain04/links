@@ -49,7 +49,7 @@ const handler = async (req, res) => {
 			long: longUrl,
 			short: shortUrl,
 			created: new Date(),
-			createdBy: { _id: ObjectId(req.user._id), email: req.user.email },
+			createdBy: { _id: ObjectId(req.user._id), email: req.user.email, name: req.user.name },
 			lastAccessed: 0,
 			timesAccessed: 0,
 			analytics: [],

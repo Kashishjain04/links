@@ -7,12 +7,10 @@ const Analytics = ({ analytics }) => {
 	const maxTime = new Date(); // today
 	let monthsArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-	console.log(analytics);
-
 	analytics.forEach((analytic) => {
 		const date = new Date(analytic.timestamp);
 		const month = date.getMonth();
-		if (date >= minTime && data <= maxTime) {
+		if (date >= minTime && date <= maxTime) {
 			monthsArray[month] += 1;
 		}
 	});
@@ -45,7 +43,7 @@ const Analytics = ({ analytics }) => {
 			},
 			y: {
 				min: 0,
-        max: Math.max(10, maxClicks),
+        max: Math.max(5, maxClicks+1),
         ticks: {
 				  stepSize: 1,
         }

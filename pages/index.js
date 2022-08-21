@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Navbar from "../components/Navbar";
 import { resetUser, setUser } from "../redux/slices/userSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Home(props) {
 	const dispatch = useDispatch(),
@@ -22,6 +23,12 @@ export default function Home(props) {
 		if (longUrl.substr(0, prefix1.length) !== prefix1 && longUrl.substr(0, prefix2.length) !== prefix2) {
 			longUrl = prefix1 + longUrl;
 		}
+		if (longUrl.startsWith(process.env.NEXT_PUBLIC_BASE_URL)) {
+			toast.error("Destination leading to ∞ loop.");
+			setLoading(false);
+			return;
+		}
+
 		fetch("/api/shorten", {
 			method: "POST",
 			body: JSON.stringify({ longUrl, customSlug: slug }),
@@ -29,19 +36,20 @@ export default function Home(props) {
 			.then((res) => res.json())
 			.then((res) => {
 				if (res.error) {
-					alert(res.error);
+					toast.error(res.error);
 				} else {
 					setUrl(process.env.NEXT_PUBLIC_BASE_URL + "/" + res.short);
 					setReadOnly(true);
 				}
 			})
-			.catch((err) => console.log(err.message))
+			.catch((err) => toast.error("Unexpected Error!"))
 			.finally(() => setLoading(false));
 	};
 
 	const copyHandler = (e) => {
 		e.preventDefault();
 		navigator.clipboard.writeText(url);
+		toast.success("Copied to clipboard!");
 	};
 
 	useEffect(() => {
@@ -113,6 +121,7 @@ export default function Home(props) {
 
 	return (
 		<div>
+			<Toaster position="bottom-center" reverseOrder={false} />
 			<Head>
 				<title>Links</title>
 				<link rel="icon" href="/logo.png" />
