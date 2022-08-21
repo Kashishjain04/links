@@ -17,7 +17,7 @@ const LinksTableSM = ({ links, activeLink, setActiveLink, className = "" }) => {
 		return (
 			<div className="absolute z-10 bg-gray-100 w-full min-h-[90vh] -mx-4 px-2">
         <div className="flex justify-end py-2">
-				<IconButton className="ml-auto" onClick={() => setShowDialog(false)}>
+				<IconButton aria-label="Close Menu" className="ml-auto" onClick={() => setShowDialog(false)}>
 					<XIcon className="h-7 w-7" />
 				</IconButton>
         </div>

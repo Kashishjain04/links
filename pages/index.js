@@ -28,6 +28,11 @@ export default function Home(props) {
 			setLoading(false);
 			return;
 		}
+		if (slug && (slug.contains(".") || slug.contains(" "))) {
+			toast.error("Invalid customed slug.");
+			setLoading(false);
+			return;
+		}
 
 		fetch("/api/shorten", {
 			method: "POST",

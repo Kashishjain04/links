@@ -66,8 +66,8 @@ const Navbar = () => {
 					Links
 				</h1>
 				{user ? (
-					<IconButton onClick={() => setExpanded((prev) => !prev)}>
-						<Avatar src={`https://avatars.dicebear.com/api/micah/${user.name}.svg`} />
+					<IconButton aria-label="profile" onClick={() => setExpanded((prev) => !prev)}>
+						<Avatar src={`https://avatars.dicebear.com/api/micah/${user.name}.svg`} alt="avatar" />
 					</IconButton>
 				) : (
 					<button

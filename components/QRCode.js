@@ -27,6 +27,7 @@ const QRCode = ({ showQR, setShowQR, url }) => {
 		>
 			<div className="relative outline-none bg-gray-100 rounded-md p-4">
 				<IconButton
+					aria-label="Close"
 					style={{ position: "absolute" }}
 					className="absolute top-2 right-2"
 					onClick={() => setShowQR(false)}
@@ -39,6 +40,7 @@ const QRCode = ({ showQR, setShowQR, url }) => {
 				<img
 					onLoad={() => setImageLoaded(true)}
 					className={`p-2 border max-w-[80vw] my-4 ${!imageLoaded && "hidden"}`}
+					alt="QR Code"
 					src={`https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${url}`}
 				/>
 				<button
