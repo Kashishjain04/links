@@ -7,7 +7,7 @@ const Analytics = ({ analytics }) => {
 	const maxTime = new Date(); // today
 	let monthsArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-	analytics.forEach((analytic) => {
+	analytics?.forEach((analytic) => {
 		const date = new Date(analytic.timestamp);
 		const month = date.getMonth();
 		if (date >= minTime && date <= maxTime) {

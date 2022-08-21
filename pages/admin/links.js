@@ -1,8 +1,8 @@
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import Cookies from "cookies";
 import Error from "next/error";
 import Head from "next/head";
-import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import LinkDetails from "../../components/LinkDetails";
 import LinksTableBG from "../../components/LinksTableBG";
 import LinksTableSM from "../../components/LinksTableSM";
@@ -30,21 +30,29 @@ const LinksPage = (props) => {
 			) : (
 				<>
 					<Navbar />
-					<main className="px-4 md:px-0 pt-16 bg-gray-100 min-h-screen flex flex-col md:flex-row">
-						<LinksTableSM
-							activeLink={activeLink}
-							setActiveLink={setActiveLink}
-							links={props.links}
-							className="md:hidden"
-						/>
-						<LinksTableBG
-							activeLink={activeLink}
-							setActiveLink={setActiveLink}
-							className="hidden md:block md:flex-[0.4] lg:flex-[0.3] h-[90vh]"
-							links={props.links}
-						/>
-						<LinkDetails link={props.links[activeLink]} className="h-[90vh] overflow-y-scroll flex-1 md:py-4 md:px-8" />
-					</main>
+					{props.links?.length ? (
+						<main className="px-4 md:px-0 pt-16 bg-gray-100 min-h-screen flex flex-col md:flex-row">
+							<LinksTableSM
+								activeLink={activeLink}
+								setActiveLink={setActiveLink}
+								links={props.links}
+								className="md:hidden"
+							/>
+							<LinksTableBG
+								activeLink={activeLink}
+								setActiveLink={setActiveLink}
+								className="hidden md:block md:flex-[0.4] lg:flex-[0.3] h-[90vh]"
+								links={props.links}
+							/>
+							<p className="md:hidden w-screen h-0.5 -mx-4 mt-4 mb-2 bg-gray-200" />
+							<LinkDetails
+								link={props.links[activeLink]}
+								className="h-[90vh] overflow-y-scroll flex-1 md:py-4 md:px-8"
+							/>
+						</main>
+					) : (
+						<Error statusCode={403} title="No Links Found" />
+					)}
 				</>
 			)}
 		</div>

@@ -5,12 +5,26 @@ import CopyIcon from "@heroicons/react/outline/DuplicateIcon";
 import QRIcon from "@heroicons/react/outline/QrcodeIcon";
 import DestinationIcon from "@heroicons/react/outline/SwitchHorizontalIcon";
 import ChartIcon from "@heroicons/react/solid/ChartBarIcon";
+import DeleteIcon from "@heroicons/react/outline/TrashIcon";
 import toast, { Toaster } from "react-hot-toast";
 import QRCode from "./QRCode";
 import Analytics from "./Analytics";
 
 const LinkDetails = ({ link, className = "" }) => {
 	const [showQR, setShowQR] = useState(false);
+
+	const deleteHandler = () => {
+		fetch("/api/deleteLink", {
+			method: "DELETE",
+			body: JSON.stringify({ _id: link?._id }),
+		})
+			.then((res) => res.json())
+			.then((res) => {
+				if (res.error) return toast.error(res.error);
+				window.location.reload();
+			})
+			.catch(() => toast.error("Unexpected error occured"));
+	};
 
 	const copyHandler = (e) => {
 		e.preventDefault();
@@ -27,14 +41,24 @@ const LinkDetails = ({ link, className = "" }) => {
 
 	return (
 		<div className={className + " select-none flex flex-col space-y-5"}>
-			<QRCode showQR={showQR} setShowQR={setShowQR} url={process.env.NEXT_PUBLIC_BASE_URL + "/" + link?.short} />
+			<QRCode
+				showQR={showQR}
+				setShowQR={setShowQR}
+				url={process.env.NEXT_PUBLIC_BASE_URL + "/" + link?.short}
+			/>
 			<Toaster position="bottom-center" reverseOrder={false} />
-			<p className="mt-5">
-				<span className="uppercase text-gray-500">
-					{moment(link?.created).format("MMM D YYYY, H:mm")}{" "}
-				</span>
-				<span className="text-[#eb7f00] font-medium">- {link?.createdBy?.name}</span>
-			</p>
+			<div className="mt-5 flex items-center justify-between">
+				<p>
+					<span className="uppercase text-gray-500">
+						{moment(link?.created).format("MMM D YYYY, H:mm")}{" "}
+					</span>
+					<span className="text-[#eb7f00] font-medium">- {link?.createdBy?.name}</span>
+				</p>
+				<p onClick={deleteHandler} className="flex items-center space-x-1 p-2 rounded-md cursor-pointer active:bg-gray-200 active:text-gray-600 transition-all duration-500">
+					<DeleteIcon className="h-6 w-6" />
+					<span>Delete</span>
+				</p>
+			</div>
 			<div className="border border-blue-500 rounded-lg px-4 py-2 flex flex-col xs:flex-row items-center">
 				<div className="flex flex-1 self-start xs:self-center">
 					<LinkIcon className="w-5 h-5 mr-2 text-gray-500" />

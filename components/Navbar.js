@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import IconButton from "@mui/material/IconButton";
 import Avatar from "@mui/material/Avatar";
-import UserIcon from "@heroicons/react/outline/UserCircleIcon";
 import { resetUser, selectUser } from "../redux/slices/userSlice";
 
 const Navbar = () => {
@@ -68,9 +67,7 @@ const Navbar = () => {
 				</h1>
 				{user ? (
 					<IconButton onClick={() => setExpanded((prev) => !prev)}>
-						<Avatar>
-							<UserIcon className="text-black bg-white p-1" />
-						</Avatar>
+						<Avatar src={`https://avatars.dicebear.com/api/micah/${user.name}.svg`} />
 					</IconButton>
 				) : (
 					<button

@@ -1,24 +1,10 @@
 import ChartOutlineIcon from "@heroicons/react/outline/ChartBarIcon";
 import ChartSolidIcon from "@heroicons/react/solid/ChartBarIcon";
 import moment from "moment";
-import toast, { Toaster } from "react-hot-toast";
 
 const LinksTableBG = ({ links, activeLink, setActiveLink, className = "" }) => {
-	const deleteLink = (link) => {
-		fetch("/api/deleteLink", {
-			method: "DELETE",
-			body: JSON.stringify({ _id: link?._id }),
-		})
-			.then((res) => res.json())
-			.then((res) => {
-				if (res.error) return toast.error(res.error);
-				window.location.reload();
-			})
-			.catch(() => toast.error("Unexpected error occured"));
-	};
 	return (
 		<div className={className + " overflow-y-scroll relative bg-gray-200 hide-scrollbar"}>
-			<Toaster position="bottom-center" reverseOrder={false} />
 			{links?.map((link, i) => (
 				<div
 					onClick={() => setActiveLink(i)}
