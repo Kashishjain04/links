@@ -10,6 +10,12 @@ module.exports = {
         'xs': '520px',
         // => @media (min-width: 520px) { ... }
       },
+      spacing: {
+        'remScreen': 'calc(100vh - 3.5rem)',
+      },
+      minHeight: {
+        'remScreen': 'calc(100vh - 3.5rem)',
+      }
     },
   },
   plugins: [

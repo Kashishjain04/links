@@ -1,6 +1,7 @@
 import React from "react";
+//eslint-disable-next-line
 import Chart from "chart.js/auto";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 const Analytics = ({ analytics }) => {
 	const minTime = new Date(new Date().getFullYear(), 0, 1); // first day of the year
@@ -15,12 +16,13 @@ const Analytics = ({ analytics }) => {
 		}
 	});
 
-  const maxClicks = monthsArray.reduce((a, b) => Math.max(a, b), -Infinity);
+  const maxValue = Math.max(...monthsArray);
 
 	const chartData = {
 		datasets: [
 			{
 				data: monthsArray,
+				backgroundColor: ["#eb7f00aa"]
 			},
 		],
 		labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
@@ -43,7 +45,7 @@ const Analytics = ({ analytics }) => {
 			},
 			y: {
 				min: 0,
-        max: Math.max(5, maxClicks+1),
+        max: Math.max(5, maxValue+1),
         ticks: {
 				  stepSize: 1,
         }
@@ -54,7 +56,7 @@ const Analytics = ({ analytics }) => {
 	return (
 		<div className="relative">
       <p className="text-gray-500 absolute -top-4 right-4">FY: {minTime.getFullYear()}</p>
-			<Line className="w-48 h-48" data={chartData} options={chartOptions} />
+			<Bar className="w-48 h-48" data={chartData} options={chartOptions} />
 		</div>
 	);
 };

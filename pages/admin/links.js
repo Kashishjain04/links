@@ -31,7 +31,7 @@ const LinksPage = (props) => {
 				<>
 					<Navbar />
 					{props.links?.length ? (
-						<main className="px-4 md:px-0 pt-16 bg-gray-100 min-h-screen flex flex-col md:flex-row">
+						<main className="px-4 md:px-0 pt-14 bg-gray-100 min-h-screen flex flex-col md:flex-row">
 							<LinksTableSM
 								activeLink={activeLink}
 								setActiveLink={setActiveLink}
@@ -41,13 +41,13 @@ const LinksPage = (props) => {
 							<LinksTableBG
 								activeLink={activeLink}
 								setActiveLink={setActiveLink}
-								className="hidden md:block md:flex-[0.4] lg:flex-[0.3] h-[90vh]"
+								className="hidden md:block md:flex-[0.4] lg:flex-[0.3] h-remScreen"
 								links={props.links}
 							/>
 							<p className="md:hidden w-screen h-0.5 -mx-4 mt-4 mb-2 bg-gray-200" />
 							<LinkDetails
 								link={props.links[activeLink]}
-								className="h-[90vh] overflow-y-scroll flex-1 md:py-4 md:px-8"
+								className="h-remScreen overflow-y-scroll flex-1 md:py-4 md:px-8"
 							/>
 						</main>
 					) : (
