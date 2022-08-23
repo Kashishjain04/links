@@ -8,10 +8,12 @@ import ChartIcon from "@heroicons/react/solid/ChartBarIcon";
 import DeleteIcon from "@heroicons/react/outline/TrashIcon";
 import toast, { Toaster } from "react-hot-toast";
 import QRCode from "./QRCode";
-import Analytics from "./Analytics";
+import MonthAnalytics from "./MonthAnalytics";
+import LocationAnalytics from "./LocationAnalytics";
 
 const LinkDetails = ({ link, className = "" }) => {
-	const [showQR, setShowQR] = useState(false);
+	const [showQR, setShowQR] = useState(false),
+		[analyticsType, setAnalyticsType] = useState(1); // 1->month, 2->location
 
 	const deleteHandler = () => {
 		fetch("/api/deleteLink", {
@@ -54,7 +56,10 @@ const LinkDetails = ({ link, className = "" }) => {
 					</span>
 					<span className="text-[#eb7f00] font-medium">- {link?.createdBy?.name}</span>
 				</p>
-				<p onClick={deleteHandler} className="flex items-center space-x-1 p-2 rounded-md cursor-pointer active:bg-gray-200 active:text-gray-600 transition-all duration-500">
+				<p
+					onClick={deleteHandler}
+					className="flex items-center space-x-1 p-2 rounded-md cursor-pointer active:bg-gray-200 active:text-gray-600 transition-all duration-500"
+				>
 					<DeleteIcon className="h-6 w-6" />
 					<span>Delete</span>
 				</p>
@@ -104,7 +109,27 @@ const LinkDetails = ({ link, className = "" }) => {
 				</div>
 				<p className="text-sm text-gray-500">TOTAL CLICKS</p>
 			</div>
-			<Analytics analytics={link?.analytics} />
+			<div className="flex w-full md:ml-auto md:w-auto border rounded-md text-sm md:text-base text-center font-medium cursor-pointer">
+				<p
+					onClick={() => setAnalyticsType(1)}
+					className={`w-1/2 py-1 md:px-4 md:py-2 border-r rounded-l-md ${
+						analyticsType === 1 && "bg-[#eb7f00] text-white"
+					}`}
+				>
+					Months
+				</p>
+				<p
+					onClick={() => setAnalyticsType(2)}
+					className={`w-1/2 py-1 md:px-4 md:py-2 rounded-r-md ${analyticsType === 2 && "bg-[#eb7f00] text-white"}`}
+				>
+					Region
+				</p>
+			</div>
+			{analyticsType === 1 ? (
+				<MonthAnalytics analytics={link?.analytics} />
+			) : (
+				<LocationAnalytics analytics={link?.analytics} />
+			)}
 		</div>
 	);
 };

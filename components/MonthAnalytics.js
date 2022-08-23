@@ -3,7 +3,7 @@ import React from "react";
 import Chart from "chart.js/auto";
 import { Bar } from "react-chartjs-2";
 
-const Analytics = ({ analytics }) => {
+const MonthAnalytics = ({ analytics }) => {
 	const minTime = new Date(new Date().getFullYear(), 0, 1); // first day of the year
 	const maxTime = new Date(); // today
 	let monthsArray = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -61,4 +61,4 @@ const Analytics = ({ analytics }) => {
 	);
 };
 
-export default Analytics;
+export default MonthAnalytics;
