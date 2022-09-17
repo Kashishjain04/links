@@ -24,11 +24,12 @@ export default function Home(props) {
 			longUrl = prefix1 + longUrl;
 		}
 		if (longUrl.startsWith(process.env.NEXT_PUBLIC_BASE_URL)) {
-			toast.error("Destination leading to ∞ loop.");
+			toast.error("Invalid destination.");
 			setLoading(false);
 			return;
 		}
-		if (slug && (slug.contains(".") || slug.contains(" "))) {
+		console.log("slug", slug);
+		if (slug && (slug.includes(".") || slug.includes(" "))) {
 			toast.error("Invalid customed slug.");
 			setLoading(false);
 			return;
