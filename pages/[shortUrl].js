@@ -23,12 +23,21 @@ export async function getServerSideProps(context) {
 		.then((res) => res)
 		.catch(() => {});
 
+	const useragent = await fetch(
+		`https://api.ipgeolocation.io/user-agent?apiKey=${process.env.GEOLOCATION_API_ID}&ip=${ip}`
+	)
+		.then((res) => res.json())
+		.then((res) => res)
+		.catch(() => {});
+
 	const analyticsObj = {
 		timestamp: new Date(),
 		ip: geolocation.ip,
 		country: geolocation.country_name,
 		region: geolocation.state_prov,
 		timeZone: geolocation.time_zone,
+		deviceType: useragent.device.type,
+		deviceOS: useragent.operatingSystem.name,
 	};
 
 	if (shortUrl)
