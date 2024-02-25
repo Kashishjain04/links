@@ -36,8 +36,8 @@ export async function getServerSideProps(context) {
 		country: geolocation.country_name,
 		region: geolocation.state_prov,
 		timeZone: geolocation.time_zone,
-		deviceType: useragent.device.type,
-		deviceOS: useragent.operatingSystem.name,
+		deviceType: useragent.device?.type,
+		deviceOS: useragent.operatingSystem?.name,
 	};
 
 	if (shortUrl)
